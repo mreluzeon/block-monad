@@ -1,66 +1,67 @@
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
 
 import Lib
 
-import Control.Monad
-import Data.Char
-import System.IO
-import Network
-import Data.Time.LocalTime
-import Control.Parallel
+import Web.Spock
+import Web.Spock.Config
 
-data RequestType = GET | POST deriving (Show)
-data Request = Request { rtype :: RequestType, path :: String, options :: [(String,String)] }
-data Response = Response { version :: String, statuscode :: Int }
+import Data.Aeson       hiding (json)
+import Data.Monoid      ((<>))
+import Data.Text        (Text, pack)
+import GHC.Generics
 
-instance Show Request where
-  show r = "Request { " ++ show((rtype r)) ++ " " ++ (path r)  ++ (foldl (\acc (k,v) -> acc ++ "\n  " ++ k ++ ": " ++ v) "" (options r)) ++ "\n}"
+-- data Person = Person
+--   { name :: Text
+--   , age  :: Int
+--   } deriving (Generic, Show)
+-- instance ToJSON Person
+-- instance FromJSON Person
 
-instance Show Response where
-  show r = version(r) ++ " " ++ show(statuscode(r)) ++ " " ++ (case statuscode(r) of
-    100 -> "Continue"
-    200 -> "OK"
-    404 -> "Not Found") ++ "\r\n\r\n"
+type Api = SpockM () () () ()
 
-fromString :: String -> RequestType
-fromString t = case t of
-  "GET" -> GET
-  "POST" -> POST
+type ApiAction a = SpockAction () () () a
 
-respond :: Request -> Handle -> IO ()
-respond request handle = do
-  putStrLn $ show request
-  let response = Response {version = "HTTP/1.1", statuscode = 200}
-  hPutStr handle $ show(response)
-  time <- getZonedTime
-  case path(request) of
-    "/furry" -> hPutStr handle $ "Blocked by RosComNadzor"
-    name -> hPutStr handle $ "Hello, " ++ tail(name)
- 
-parseRequestHelper :: ([String], [(String,String)]) -> [(String,String)]
-parseRequestHelper ([], accum) = accum
-parseRequestHelper ((l:rest), accum) 
-  | (length (words l)) < 2 = accum
-  | otherwise = parseRequestHelper(rest, accum ++ [(reverse . tail . reverse . head . words $ l, unwords . tail . words $ l)] )
+data JsonObject = JsonObject {firstField :: Int, secondField :: Text} deriving(Show, Generic)
+instance ToJSON JsonObject
+instance FromJSON JsonObject
 
-parseRequest :: [String] -> Request
-parseRequest lns = case (words (head lns)) of
-  [t,p,_] -> Request {rtype=(fromString t), path=p, options=parseRequestHelper((tail lns),[])}
+  -- makeChain
+main :: IO ()
+main = do
+  spockCfg <- defaultSpockCfg () PCNoDatabase ()
+  runSpock 8080 (spock spockCfg app)
 
-handleAccept :: Handle -> String -> IO ()
-handleAccept handle hostname = do 
-  putStrLn $ "Handling request from " ++ hostname
-  request <- fmap (parseRequest . lines) (hGetContents handle)
-  respond request handle
-  return ()
+app :: Api
+app = do
+  get "ping" $ do
+    text "  {\"state\": \"ok\", \"answer\": \"pong\"}  "
+
+  get ("fuck" <//> var) $ \name -> do
+    text $ "Fuck you, " <> name <> "!"
+
+  post "ppc" $ do 
+    body <- jsonBody' :: ApiAction JsonObject
+    text $ "ich habe win" <> pack (show body)
+
+  -- post ("send" <//> var) $ \value -> do
+
+  -- get ("take" <//> var) $ \howmany -> do
+    
+
+    -- "hello f world"
 
 -- main :: IO ()
 -- main = someFunc
 
-main = withSocketsDo $ do
-  sock <- listenOn (PortNumber 9000)
-  putStrLn "Listening on port 9000"
-  forever $ do
-    (handle, hostname, port) <- accept sock
-    handleAccept handle hostname
-    hClose handle
+
+{-
+
+GET  /ping                 - sends pong
+GET  /take?[howmany=[0..]] - give your blocks
+GET  /nodes                - give your nodes
+
+POST /send?value={sth}     - sends string to block-monad
+
+-}
