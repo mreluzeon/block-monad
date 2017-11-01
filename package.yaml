@@ -33,6 +33,16 @@ executables:
     dependencies:
     - block-monad
 
+  chain-example-exe:
+    main:                chain_example.hs
+    source-dirs:         examples
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - block-monad
+
 tests:
   block-monad-test:
     main:                Spec.hs
