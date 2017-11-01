@@ -18,7 +18,7 @@ extra-source-files:
 dependencies:
 - base >= 4.7 && < 5
 - network > 2.6
-- Spock
+- scotty
 - MissingH
 - aeson
 - text
