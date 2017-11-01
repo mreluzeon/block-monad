@@ -1,16 +1,19 @@
 module Chain where
 
 import Control.Concurrent.STM
-import Control.Monad
-import qualified Data.Map.Strict as Map
 
 type Transaction = String
-type Chain = Block
-type Block = TVar [Transaction]
+type Chain = TVar Block
+type Block = [Transaction]
 
 makeChain :: STM Chain
-makeChain = newTVarIO []
+makeChain = do
+  chain <- newTVar []
+  return chain
 
 addTransaction :: Chain -> Transaction -> STM ()
-addTransaction chain transaction = do
+addTransaction chain transaction =
+  modifyTVar chain $ (++[transaction])
 
+getTransactions :: Chain -> STM Block
+getTransactions = readTVar
