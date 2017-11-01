@@ -17,15 +17,12 @@ extra-source-files:
 
 dependencies:
 - base >= 4.7 && < 5
-<<<<<<< HEAD
 - network > 2.6
 - scotty
 - MissingH
 - aeson
 - text
-=======
 - stm
->>>>>>> ae91b363a8b6f98211641ecf03ab1850b2161ce2
 
 library:
   source-dirs: src
