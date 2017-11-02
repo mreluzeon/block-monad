@@ -1,0 +1,62 @@
+name:                block-monad
+version:             0.0.1.0
+github:              githubuser/block-monad
+license:             BSD3
+author:              Author name here
+maintainer:          example@example.com
+copyright:           2017 Author name here
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:
+# description:
+# category:            Web
+
+dependencies:
+- base >= 4.7 && < 5
+- network > 2.6
+- scotty
+- MissingH
+- aeson
+- text
+- stm
+- distributed-process
+- network-transport-tcp
+
+library:
+  source-dirs: src
+
+executables:
+  block-monad-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - block-monad
+
+  chain-example-exe:
+    main:                chain_example.hs
+    source-dirs:         examples
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - block-monad
+
+tests:
+  block-monad-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - block-monad
