@@ -1,5 +1,5 @@
 name:                block-monad
-version:             0.1.0.0
+version:             0.0.1.0
 github:              githubuser/block-monad
 license:             BSD3
 author:              Author name here
@@ -17,6 +17,11 @@ extra-source-files:
 
 dependencies:
 - base >= 4.7 && < 5
+- network > 2.6
+- scotty
+- MissingH
+- aeson
+- text
 - stm
 - distributed-process
 - network-transport-tcp
