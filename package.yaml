@@ -23,8 +23,8 @@ dependencies:
 - aeson
 - text
 - stm
-# - distributed-process
-# - network-transport-tcp
+- distributed-process
+- network-transport-tcp
 
 library:
   source-dirs: src
