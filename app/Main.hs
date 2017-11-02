@@ -25,7 +25,6 @@ main = do
       liftIO $ atomically $ addTransaction blockchain value
       text $ "Success"
 
-
   -- scotty 3000 $ do
   -- get "/getBlocks/:quantity" $ do
   --   quantity <- param "quantity"
