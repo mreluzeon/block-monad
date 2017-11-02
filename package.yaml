@@ -35,6 +35,7 @@ executables:
     source-dirs:         app
     ghc-options:
     - -threaded
+    - -Wall
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
@@ -45,6 +46,7 @@ executables:
     source-dirs:         examples
     ghc-options:
     - -threaded
+    - -Wall
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
@@ -56,6 +58,7 @@ tests:
     source-dirs:         test
     ghc-options:
     - -threaded
+    - -Wall
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
