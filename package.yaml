@@ -18,6 +18,10 @@ extra-source-files:
 dependencies:
 - base >= 4.7 && < 5
 - stm
+- cloud-haskell
+- syb
+- time
+- binary
 
 library:
   source-dirs: src
