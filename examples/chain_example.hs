@@ -7,7 +7,8 @@ mai :: IO ()
 mai = do
   chain <- newTVarIO ([] :: [String])
   atomically $ addTransaction chain "My transaction"
-  atomically $ addTransaction chain "My transaction1"
+  atomically $ chain `addTransaction` "My transaction1"
+  atomically $ addTransaction chain "My transaction2"
   transactions <- atomically $ readTVar chain
   print transactions
 
