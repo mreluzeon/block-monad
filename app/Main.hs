@@ -8,5 +8,5 @@ import Control.Distributed.Process.Node (initRemoteTable)
 
 main = do
   P2P.bootstrap "127.0.0.1" "9001" [P2P.makeNodeId "seedhost:9000"] initRemoteTable $ do
-    liftIO $ threadDelay 1000000 -- give dispatcher a second to discover other nodes
+    liftIO $ threadDelay 1000000000 -- give dispatcher a second to discover other nodes
     P2P.nsendPeers "myService" ("some", "message")
