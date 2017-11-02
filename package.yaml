@@ -24,7 +24,9 @@ dependencies:
 - text
 - stm
 - distributed-process
+- distributed-process-p2p
 - network-transport-tcp
+- mtl
 
 library:
   source-dirs: src
