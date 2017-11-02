@@ -25,6 +25,8 @@ dependencies:
 - stm
 - distributed-process
 - network-transport-tcp
+- cryptonite
+- bytestring
 
 library:
   source-dirs: src
