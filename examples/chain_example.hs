@@ -3,8 +3,8 @@ import Chain
 import Control.Concurrent.STM
 
 
-main :: IO ()
-main = do
+mai :: IO ()
+mai = do
   chain <- newTVarIO ([] :: [String])
   atomically $ addTransaction chain "My transaction"
   atomically $ chain `addTransaction` "My transaction1"
@@ -15,5 +15,5 @@ main = do
   chain' <- atomically $ makeChain
   atomically $ addTransaction chain' "My transaction"
   atomically $ addTransaction chain' "My transaction1"
-  transactions' <- atomically $ viewChain chain
+  transactions' <- atomically $ getTransactions chain
   print transactions'
