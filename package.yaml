@@ -37,6 +37,7 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - --Wall
     dependencies:
     - block-monad
 
@@ -46,6 +47,7 @@ executables:
     ghc-options:
     - -threaded
     - -rtsopts
+    - -Wall
     - -with-rtsopts=-N
     dependencies:
     - block-monad
