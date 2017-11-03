@@ -28,6 +28,7 @@ dependencies:
 - network-transport-tcp
 - cryptonite
 - bytestring
+- crdt
 - mtl
 
 library:
