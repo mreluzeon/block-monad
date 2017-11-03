@@ -25,9 +25,6 @@ main = do
 
     P2P.nsendPeers myName "H - водород"
 
-    peers <- P2P.getPeers
-    say $ show peers
-
     forever $ do
       say "Waiting... <<<<<<<<"
       receiveWait [ matchAny (\m -> say "asjf;sadjfk dsa;djf") ]
