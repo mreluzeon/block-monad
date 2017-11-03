@@ -3,8 +3,8 @@ import Chain
 import Control.Concurrent.STM
 
 
-mai :: IO ()
-mai = do
+main :: IO ()
+main = do
   chain <- newTVarIO ([] :: [String])
   atomically $ addTransaction chain "My transaction"
   atomically $ chain `addTransaction` "My transaction1"

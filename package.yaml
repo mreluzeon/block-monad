@@ -24,9 +24,11 @@ dependencies:
 - text
 - stm
 - distributed-process
+- distributed-process-p2p
 - network-transport-tcp
 - cryptonite
 - bytestring
+- mtl
 
 library:
   source-dirs: src
@@ -37,6 +39,7 @@ executables:
     source-dirs:         app
     ghc-options:
     - -threaded
+    - -Wall
     - -rtsopts
     - -with-rtsopts=-N
     - -Wall
@@ -48,6 +51,7 @@ executables:
     source-dirs:         examples
     ghc-options:
     - -threaded
+    - -Wall
     - -rtsopts
     - -Wall
     - -with-rtsopts=-N
@@ -60,6 +64,7 @@ tests:
     source-dirs:         test
     ghc-options:
     - -threaded
+    - -Wall
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:

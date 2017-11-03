@@ -1,39 +1,36 @@
-{-# LANGUAGE DeriveGeneric     #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Main where
 
-import Web.Scotty
-
-import Data.Monoid (mconcat)
-import Control.Monad.IO.Class (liftIO)
-import Control.Concurrent.STM
-import qualified Data.Text.Lazy as L
-
-import Chain
-import Lib
+import           System.Environment (getArgs)
+import           Control.Distributed.Process
+import qualified Control.Distributed.Backend.P2P as P2P
+import           Control.Monad.Trans (liftIO)
+import           Control.Monad (forever)
+import           Control.Concurrent (threadDelay)
+import           Control.Distributed.Process.Node (initRemoteTable)
 
 main = do
-  blockchain <- atomically $ makeChain
-  scotty 8080 $ do
-    get "/getBlocks" $ do
-      transactions <- liftIO $ atomically $ getTransactions $ blockchain
-        -- blocks <- getTransactions blockchain
-        -- return blocks
-      text $ L.pack $ show $ transactions
-    post "/post" $ do
-      value <- param "value"
-      liftIO $ atomically $ addTransaction blockchain value
-      text $ "Success"
+  [from, to] <- getArgs
+  P2P.bootstrap "127.0.0.1" from 
+    [P2P.makeNodeId ("127.0.0.1:" ++ to)
+    ] initRemoteTable $ do
+    liftIO $ threadDelay 1000000 -- give dispatcher a second to discover other nodes
 
+    self <- getSelfPid
+    say $ "Me: " ++ show self
 
-  -- scotty 3000 $ do
-  -- get "/getBlocks/:quantity" $ do
-  --   quantity <- param "quantity"
-  --   html $ "Sorry, this function is unavailable now."
-  --   -- html $ mconcat ["<h1>Scotty, ", quantity, " me up!</h1>"]
-  
-  -- post "/post" $ do
-  --   string <- param "value"
-  --   atomically $ addTransaction blockchain string
-  --   html $ mconcat ["You have wirtten ", string, " congrats"]
-  -- putStrLn
+    let myName = "dver"
+    register myName self
+    say "Registered!!!"
+
+    P2P.nsendPeers myName "H - водород"
+
+    peers <- P2P.getPeers
+    say $ show peers
+
+    forever $ do
+      say "Waiting... <<<<<<<<"
+      receiveWait [ matchAny (\m -> say "asjf;sadjfk dsa;djf") ]
+      say "ASDFSDFSDF"
+
+-- monabλock
