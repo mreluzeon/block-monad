@@ -2,12 +2,14 @@
 module Main where
 
 import           System.Environment (getArgs)
+
 import           Control.Distributed.Process
 import qualified Control.Distributed.Backend.P2P as P2P
 import           Control.Monad.Trans (liftIO)
 import           Control.Monad (forever)
 import           Control.Concurrent (threadDelay)
 import           Control.Distributed.Process.Node (initRemoteTable)
+
 
 main = do
   [from, to] <- getArgs
