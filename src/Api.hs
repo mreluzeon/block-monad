@@ -1,34 +1,3 @@
-{-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TypeOperators #-}
-
-module Server where
-
-import Prelude ()
-import Prelude.Compat
-
-import Control.Monad.Except
-import Control.Monad.Reader
-import Data.Aeson.Types
-import Data.Attoparsec.ByteString
-import Data.ByteString (ByteString)
-import Data.List
-import Data.Maybe
-import Data.String.Conversions
-import Data.Time.Calendar
-import GHC.Generics
-import Network.HTTP.Media ((//), (/:))
-import Network.Wai
-import Network.Wai.Handler.Warp
-import Servant.API
-import System.Directory
-import qualified Data.Aeson.Parser
--}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -43,17 +12,16 @@ import qualified Data.Text as T
 import Network.Wai
 import Servant (Server, serve)
 import Servant.API
-
-type CoorEndpoint = "" :> Get '[ PlainText] Tuple
-
-beeh :: Server CoorEndpoint
-beeh = return
+import FlowerMap
+import Control.Monad
+import Control.Monad.Trans
+import Control.Concurrent.STM
 type GetEndpoint = "/getBlocks" :> Get '[ PlainText] Text
 
 geth :: FlowerMap -> Server GetEndpoint
 geth flowerMap = do
   coords <- liftIO $ atomically $ getCoordinates flowerMap
-  return $ show coords
+  return $ T.pack $ show coords
 
 type PostEndpoint = "/post" :> Post '[ PlainText] Text
 posth :: Server PostEndpoint
@@ -66,9 +34,8 @@ type API =
 
 handler :: FlowerMap -> Server API
 handler flowerMap =
-         geth
+         (geth flowerMap)
     :<|> posth
-    :<|> beeh
 
 
 api :: Proxy API

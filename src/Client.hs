@@ -2,18 +2,18 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE TypeOperators #-}
 module Client where
-  import Data.Aeson
-  import Data.Proxy
-  import GHC.Generics
-  import Network.HTTP.Client (newManager, defaultManagerSettings)
-  import Servant.API
-  import Servant.Client
+{-import Data.Aeson
+import Data.Proxy
+import GHC.Generics
+import Network.HTTP.Client (newManager, defaultManagerSettings)
+import Servant.API
+import Servant.Client
 
 --type ClientApi = "/post" :> ReqBody '[JSON] '' :> Put '[]
-newtype Messange = Messange {msg :: String}
+newtype Message = Message {msg :: String}
   deriving (Show, Generic)
-instance FromJSON Messange
-queries :: ClientM Messange
+instance FromJSON Message
+queries :: ClientM Message
 queries = return "post"
 run :: IO()
 run = do
@@ -22,3 +22,4 @@ run = do
   case res of
     Left err -> putStrLn $ "ERROR: " ++ show err
     Right print Messange
+-}

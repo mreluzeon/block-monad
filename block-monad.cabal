@@ -41,6 +41,15 @@ library
     , crdt
     , mtl
     , binary
+    , wai
+    , servant
+    , servant-server
+    , servant-client
+    , time
+    , http-client
+    , http-types
+    , directory
+    , warp
   exposed-modules:
       Api
       Chain
@@ -72,6 +81,15 @@ executable block-monad-exe
     , crdt
     , mtl
     , binary
+    , wai
+    , servant
+    , servant-server
+    , servant-client
+    , time
+    , http-client
+    , http-types
+    , directory
+    , warp
     , block-monad
   default-language: Haskell2010
 
@@ -96,6 +114,15 @@ executable chain-example-exe
     , crdt
     , mtl
     , binary
+    , wai
+    , servant
+    , servant-server
+    , servant-client
+    , time
+    , http-client
+    , http-types
+    , directory
+    , warp
     , block-monad
   default-language: Haskell2010
 
@@ -120,6 +147,15 @@ executable flowermap-example-exe
     , crdt
     , mtl
     , binary
+    , wai
+    , servant
+    , servant-server
+    , servant-client
+    , time
+    , http-client
+    , http-types
+    , directory
+    , warp
     , block-monad
   default-language: Haskell2010
 
@@ -145,5 +181,14 @@ test-suite block-monad-test
     , crdt
     , mtl
     , binary
+    , wai
+    , servant
+    , servant-server
+    , servant-client
+    , time
+    , http-client
+    , http-types
+    , directory
+    , warp
     , block-monad
   default-language: Haskell2010

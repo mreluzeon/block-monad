@@ -31,6 +31,16 @@ dependencies:
 - crdt
 - mtl
 - binary
+- wai
+- servant
+- servant-server
+- servant-client
+- time
+- http-client
+- http-types
+- directory
+- warp
+
 
 library:
   source-dirs: src
