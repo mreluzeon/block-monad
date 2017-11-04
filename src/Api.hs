@@ -4,6 +4,7 @@
 
 module Api
   ( app
+  , api
   ) where
 
 import Data.Proxy

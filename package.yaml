@@ -82,6 +82,18 @@ executables:
     dependencies:
     - block-monad
 
+  client-exe:
+    main:                Main.hs
+    source-dirs:         Client
+    ghc-options:
+    - -threaded
+    - -Wall
+    - -rtsopts
+    - -Wall
+    - -with-rtsopts=-N
+    dependencies:
+    - block-monad
+
 tests:
   block-monad-test:
     main:                Spec.hs
