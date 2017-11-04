@@ -48,7 +48,9 @@ waitInput flowerMap = do
 main = do
   [from, to] <- getArgs
   flowerMap <- atomically makeMap
-  run 8000 $ app flowerMap
+  print "Launching server"
+  forkIO $ run 8000 $ app flowerMap
+  print "Launched!"
   P2P.bootstrap "127.0.0.1" from [P2P.makeNodeId ("127.0.0.1:" ++ to)] initRemoteTable $ do
     liftIO $ threadDelay 1000000 -- give dispatcher a second to discover other nodes
 

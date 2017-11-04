@@ -17,14 +17,15 @@ import FlowerMap
 import Control.Monad
 import Control.Monad.Trans
 import Control.Concurrent.STM
-type GetEndpoint = "/getBlocks" :> Get '[ PlainText] Text
+type GetEndpoint = "getBlocks" :> Get '[ PlainText] Text
 
 geth :: FlowerMap -> Server GetEndpoint
 geth flowerMap = do
   coords <- liftIO $ atomically $ getCoordinates flowerMap
   return $ T.pack $ show coords
+  --return "SSS"
 
-type PostEndpoint = "/post" :> Post '[ PlainText] Text
+type PostEndpoint = "post" :> Post '[ PlainText] Text
 posth :: Server PostEndpoint
 
 posth = return "post"
@@ -37,7 +38,6 @@ handler :: FlowerMap -> Server API
 handler flowerMap =
          (geth flowerMap)
     :<|> posth
-
 
 api :: Proxy API
 api = Proxy

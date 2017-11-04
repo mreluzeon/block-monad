@@ -10,7 +10,7 @@ import Servant.API
 import Data.Proxy
 
 --post :<|> get = client (api :: Data.Proxy.Proxy API)
-post :<|> get = client api
+post :<|> get = client api  
 main = do
   manager <- newManager defaultManagerSettings
   print =<< flip runClientM (ClientEnv manager (BaseUrl Http "localhost" 8000 "")) post
