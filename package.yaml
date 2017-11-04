@@ -30,6 +30,7 @@ dependencies:
 - bytestring
 - crdt
 - mtl
+- binary
 
 library:
   source-dirs: src
