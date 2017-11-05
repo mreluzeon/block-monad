@@ -75,5 +75,3 @@ main = do
 
     forever $ receiveWait [match actionHandler, match $ updateState flowerMap]
 -- monabλock
-
-
