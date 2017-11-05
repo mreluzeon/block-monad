@@ -25,13 +25,8 @@ import FlowerMap
 import Motivators
 import STMSet
 import States
+import Types
 --import Client
-
-type Flower = (Int, Int)
-
-type FlowerMap = STMSet Flower
-
-type FlowerState = State Flower
 
 waitInput :: (Ord a, Read a) => STMSet a -> IO ()
 waitInput set = do

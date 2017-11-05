@@ -60,6 +60,7 @@ library
       Motivators
       States
       STMSet
+      Types
   default-language: Haskell2010
 
 executable block-monad-exe

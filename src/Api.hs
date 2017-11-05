@@ -12,23 +12,25 @@ import Control.Monad.Trans
 import Data.Proxy
 import Data.Text (Text)
 import qualified Data.Text as T
-import FlowerMap
 import Network.Wai
 import Servant (Server, serve)
 import Servant.API
+import Data.Set (toList)
+
+import Types
+import STMSet as S
 
 type GetEndpoint = "getBlocks" :> Get '[ PlainText] Text
 
-geth :: FlowerMap -> Server GetEndpoint
-geth flowerMap = do
-  coords <- liftIO $ atomically $ getCoordinates flowerMap
-  return $ T.pack $ show coords
-  --return "SSS"
+geth :: (Show a, Ord a) => S.STMSet a -> Server GetEndpoint
+geth set = do
+  (Elems myElems) <- liftIO $ atomically $ getElems set
+  return $ T.pack $ show $ toList myElems
 
-type AddEndpoint = "add" :> ReqBody '[ JSON] Coordinate :> Put '[ PlainText] NoContent
+type AddEndpoint = "add" :> ReqBody '[ JSON] Flower :> Put '[ PlainText] NoContent
 
-addh flowerMap coord = do
-  liftIO . atomically $ addCoordinate flowerMap coord
+addh set rawElem = do
+  liftIO . atomically $ addElem set (Elem rawElem)
   return NoContent
 
 type API =
