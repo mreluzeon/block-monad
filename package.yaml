@@ -31,6 +31,17 @@ dependencies:
 - crdt
 - mtl
 - binary
+- wai
+- servant
+- servant-server
+- servant-client
+- time
+- http-client
+- http-types
+- directory
+- warp
+- containers
+
 
 library:
   source-dirs: src
@@ -63,6 +74,18 @@ executables:
   flowermap-example-exe:
     main:                flowermap_example.hs
     source-dirs:         examples
+    ghc-options:
+    - -threaded
+    - -Wall
+    - -rtsopts
+    - -Wall
+    - -with-rtsopts=-N
+    dependencies:
+    - block-monad
+
+  client-exe:
+    main:                Main.hs
+    source-dirs:         Client
     ghc-options:
     - -threaded
     - -Wall

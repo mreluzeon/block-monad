@@ -1,5 +1,4 @@
 .stack-work/
-block-monad.cabal
 *~
 dist
 dist-*

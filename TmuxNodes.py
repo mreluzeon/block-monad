@@ -3,6 +3,9 @@ import sys
 import subprocess
 
 
+NAMES = ['Sarah', 'Jacob', 'John']
+
+
 subprocess.run('stack build', shell=True)
 
 
@@ -13,8 +16,8 @@ except Exception:
 
 
 def iter_commands(n_of_nodes):
-    for i in range(n_of_nodes):
-        yield '"stack exec block-monad-exe 900{} 900{}"'.format(i, (i + 1) % n_of_nodes)
+    for i, name in zip(range(n_of_nodes), NAMES):
+        yield '"stack exec block-monad-exe {}"'.format(name)
 
 
 commands = list(iter_commands(n_of_nodes))
