@@ -47,7 +47,8 @@ main = do
   h <- openFile ("configs/" ++ configName) ReadMode
 
   from <- hGetLine h
-  to <- hGetLine h
+  tos <- hGetLine h 
+  let tosNodes = [(P2P.makeNodeId ("127.0.0.1:" ++ to)) | to <- (words tos)]
 
   flowerMap <- atomically makeSet
   let flowerState = State {state = flowerMap, serviceName = "bees"} :: FlowerState
@@ -58,7 +59,7 @@ main = do
   --forkIO $ run 8000 $ app flowerMap
   print "Launched!"
 
-  P2P.bootstrap "127.0.0.1" from [P2P.makeNodeId ("127.0.0.1:" ++ to)] initRemoteTable $ do
+  P2P.bootstrap "127.0.0.1" from tosNodes initRemoteTable $ do
     liftIO $ threadDelay 3000000 -- give dispatcher a second (or 2) to discover other nodes
 
     self <- getSelfPid
