@@ -39,5 +39,4 @@ addElems set (Elems elems) =
 
 getElems :: (Ord a) => STMSet a -> STM (Elems a)
 getElems (STMSet set) = do
-  elems <- readTVar set
-  return elems
+  readTVar set

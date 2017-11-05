@@ -13,8 +13,7 @@ type FlowerMap = TVar Coordinates
 makeMap :: STM FlowerMap
 makeMap = do
   --flowerMap <- newTVar $ (initial :: GSet Coordinate)
-  flowerMap <- newTVar S.initial 
-  return flowerMap
+  newTVar S.initial
 
 addCoordinate :: FlowerMap -> Coordinate -> STM ()
 addCoordinate flowerMap coordinate = modifyTVar flowerMap $ S.add coordinate

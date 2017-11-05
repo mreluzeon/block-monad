@@ -1,30 +1,30 @@
-{-# LANGUAGE TemplateHaskell #-}
 module Main where
 
+import Control.Concurrent (forkIO, threadDelay)
 import System.Environment (getArgs)
-import Control.Concurrent (forkIO)
 
 import Control.Concurrent.STM
-import Control.Distributed.Process
 import qualified Control.Distributed.Backend.P2P as P2P
-import Control.Monad.Trans (liftIO)
-import System.IO (isEOF)
-import Control.Monad (forever, unless)
-import Control.Concurrent (threadDelay)
+import Control.Distributed.Process
 import Control.Distributed.Process.Node (initRemoteTable)
+import Control.Monad (forever, unless)
+import Control.Monad.Trans (liftIO)
 import Network.Wai
 import Network.Wai.Handler.Warp
+import System.IO (isEOF)
 
-import FlowerMap
-import STMSet
-import Motivators
-import Crypto
 import Api
+import Crypto
+import FlowerMap
+import Motivators
+import STMSet
 import States
 --import Client
 
 type Flower = (Int, Int)
+
 type FlowerMap = STMSet Flower
+
 type FlowerState = State Flower
 
 waitInput :: (Ord a, Read a) => STMSet a -> IO ()
@@ -33,15 +33,14 @@ waitInput set = do
   unless done $ do
     line <- getLine
     let elem = read line
-    atomically $ do
-      set `addElem` Elem elem
+    atomically $ set `addElem` Elem elem
     waitInput set
 
 main = do
   [from, to] <- getArgs
 
   flowerMap <- atomically makeSet
-  let flowerState = State{state=flowerMap, serviceName="bees"} :: FlowerState
+  let flowerState = State {state = flowerMap, serviceName = "bees"} :: FlowerState
 
   keys <- newKeyPair
 
@@ -66,10 +65,6 @@ main = do
 
     let actionHandler :: Action -> Process ()
         actionHandler _ = shareState keys flowerState
-    forever $ do
-      --receiveWait [ match (\(_ :: Action) -> shareState self flowerMap)
-      receiveWait [ match actionHandler
-                  , match $ updateState flowerMap
-                  ]
 
+    forever $ receiveWait [match actionHandler, match $ updateState flowerMap]
 -- monabλock

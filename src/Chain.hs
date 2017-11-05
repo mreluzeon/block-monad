@@ -8,12 +8,11 @@ type Block = [Transaction]
 
 makeChain :: STM Chain
 makeChain = do
-  chain <- newTVar []
-  return chain
+  newTVar []
 
 addTransaction :: Chain -> Transaction -> STM ()
 addTransaction chain transaction =
-  modifyTVar chain $ (++[transaction])
+  modifyTVar chain (++[transaction])
 
 getTransactions :: Chain -> STM Block
 getTransactions = readTVar

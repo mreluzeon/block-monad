@@ -1,6 +1,3 @@
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE DeriveGeneric #-}
-
 module States where
 
 import Control.Monad (when, mapM_)
@@ -20,13 +17,13 @@ data State a = State { state :: STMSet a
                      }
 
 shareState :: (Binary a, Ord a, Typeable a) => KeyPair -> State a -> Process()
-shareState (pubk, pk) (State{state=set, serviceName=service}) = do
+shareState (pubk, pk) State{state=set, serviceName=service} = do
   elems <- liftIO $ atomically $ getElems set
   sig <- liftIO $ signMsg pk elems
   P2P.nsendPeers service SignedMessage{signature=sig, msg=elems, pubk=pubk}
 
 updateState :: (Binary a, Ord a, Show a) => STMSet a -> SignedMessage (Elems a) -> Process ()
-updateState set (SignedMessage{signature=sig, msg=newElems, pubk=pubk}) = do
+updateState set SignedMessage{signature=sig, msg=newElems, pubk=pubk} =
   when (verifyMsg pubk sig newElems) $ do
     liftIO $ atomically $ set `addElems` newElems
     (Elems myElems) <- liftIO $ atomically $ getElems set
@@ -34,5 +31,5 @@ updateState set (SignedMessage{signature=sig, msg=newElems, pubk=pubk}) = do
 
 registerStates :: ProcessId -> [State a] -> Process ()
 registerStates self states = do
-  let services = map (\(State{state=_, serviceName=service}) -> service) states
-  mapM_ ((flip register) self) services
+  let services = map (\State{state=_, serviceName=service} -> service) states
+  mapM_ (flip register self) services
