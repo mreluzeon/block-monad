@@ -25,19 +25,20 @@ geth flowerMap = do
   return $ T.pack $ show coords
   --return "SSS"
 
-type PostEndpoint = "post" :> Post '[ PlainText] Text
-posth :: Server PostEndpoint
+type AddEndpoint = "add" :> ReqBody '[ JSON] Coordinate :> Put '[ PlainText] NoContent
 
-posth = return "post"
+addh flowerMap coord = do
+  liftIO . atomically $ addCoordinate flowerMap coord
+  return NoContent
 
 type API =
         GetEndpoint
-    :<|> PostEndpoint
+    :<|> AddEndpoint
 
 handler :: FlowerMap -> Server API
 handler flowerMap =
          (geth flowerMap)
-    :<|> posth
+    :<|> (addh flowerMap)
 
 api :: Proxy API
 api = Proxy
