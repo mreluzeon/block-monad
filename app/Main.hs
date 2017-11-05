@@ -2,6 +2,13 @@ module Main where
 
 import Control.Concurrent (forkIO, threadDelay)
 import System.Environment (getArgs)
+import System.IO ( openFile 
+                 , readFile 
+                 , isEOF
+                 , readFile
+                 , IOMode(ReadMode)
+                 , hGetLine
+                 )
 
 import Control.Concurrent.STM
 import qualified Control.Distributed.Backend.P2P as P2P
@@ -11,7 +18,6 @@ import Control.Monad (forever, unless)
 import Control.Monad.Trans (liftIO)
 import Network.Wai
 import Network.Wai.Handler.Warp
-import System.IO (isEOF)
 
 import Api
 import Crypto
@@ -37,7 +43,11 @@ waitInput set = do
     waitInput set
 
 main = do
-  [from, to] <- getArgs
+  [configName] <- getArgs
+  h <- openFile ("configs/" ++ configName) ReadMode
+
+  from <- hGetLine h
+  to <- hGetLine h
 
   flowerMap <- atomically makeSet
   let flowerState = State {state = flowerMap, serviceName = "bees"} :: FlowerState
