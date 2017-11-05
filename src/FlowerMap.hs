@@ -1,5 +1,7 @@
 module FlowerMap where
 
+import Control.Monad (mapM_)
+
 import Control.Concurrent.STM
 
 import qualified CRDT.Cv.GSet as S
@@ -16,6 +18,9 @@ makeMap = do
 
 addCoordinate :: FlowerMap -> Coordinate -> STM ()
 addCoordinate flowerMap coordinate = modifyTVar flowerMap $ S.add coordinate
+
+addCoordinates :: FlowerMap -> Coordinates -> STM ()
+addCoordinates flowerMap = mapM_ (\coord -> flowerMap `addCoordinate` coord)
 
 getCoordinates :: FlowerMap -> STM Coordinates
 getCoordinates = readTVar
