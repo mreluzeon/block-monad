@@ -47,7 +47,8 @@ main = do
   h <- openFile ("configs/" ++ configName) ReadMode
 
   from <- hGetLine h
-  tos <- hGetLine h 
+  tos <- hGetLine h
+  webPort <- hGetLine h
   let tosNodes = [(P2P.makeNodeId ("127.0.0.1:" ++ to)) | to <- (words tos)]
 
   flowerMap <- atomically makeSet
@@ -56,7 +57,7 @@ main = do
   keys <- newKeyPair
 
   print "Launching server"
-  --forkIO $ run 8000 $ app flowerMap
+  forkIO $ run (read webPort) $ app flowerMap
   print "Launched!"
 
   P2P.bootstrap "127.0.0.1" from tosNodes initRemoteTable $ do
